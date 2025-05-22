@@ -1,0 +1,55 @@
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on: [ zookeeper ]
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports:
+      - "9092:9092"
+
+  mongo:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+
+  producer:
+    build: ./kafka_streaming
+    depends_on: [ kafka ]
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    command: ["python", "producer.py"]
+
+
+  spark:
+    build: ./spark_processor
+    depends_on:
+      - kafka
+      - mongo
+    user: root
+    command: >
+      spark-submit
+      --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0
+      /app/consumer.py
+    # no volume mounts needed—everything is baked into the image
+
+
+    
+
+  dashboard:
+    build: ./dashboard
+    depends_on: [ mongo ]
+    ports:
+      - "8000:8000"
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
