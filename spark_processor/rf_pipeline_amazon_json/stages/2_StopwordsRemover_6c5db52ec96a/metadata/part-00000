@@ -1,0 +1,1 @@
+{"class":"__main__.StopwordsRemover","timestamp":1748037478811,"sparkVersion":"3.5.1","uid":"StopwordsRemover_6c5db52ec96a","paramMap":{"inputCol":"tokens","outputCol":"filtered_tokens"},"defaultParamMap":{"outputCol":"StopwordsRemover_6c5db52ec96a__output"}}

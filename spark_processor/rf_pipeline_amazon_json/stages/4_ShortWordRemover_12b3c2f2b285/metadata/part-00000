@@ -1,0 +1,1 @@
+{"class":"__main__.ShortWordRemover","timestamp":1748037479226,"sparkVersion":"3.5.1","uid":"ShortWordRemover_12b3c2f2b285","paramMap":{"inputCol":"lemmatized_tokens","outputCol":"final_tokens"},"defaultParamMap":{"outputCol":"ShortWordRemover_12b3c2f2b285__output"}}
