@@ -1,0 +1,8 @@
+Django>=4.0
+channels
+channels-redis
+pymongo
+daphne
+whitenoise
+
+# plus any others your example used, e.g. plotly

@@ -1,1 +1,0 @@
-{"class":"org.apache.spark.ml.feature.RegexTokenizer","timestamp":1747692320677,"sparkVersion":"3.5.1","uid":"RegexTokenizer_4dd8aae19d92","paramMap":{"pattern":"\\s+","inputCol":"text_clean","outputCol":"tokens"},"defaultParamMap":{"pattern":"\\s+","minTokenLength":1,"toLowercase":true,"outputCol":"RegexTokenizer_4dd8aae19d92__output","gaps":true}}

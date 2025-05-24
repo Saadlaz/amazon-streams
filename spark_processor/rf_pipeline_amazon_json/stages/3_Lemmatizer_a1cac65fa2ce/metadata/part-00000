@@ -1,0 +1,1 @@
+{"class":"__main__.Lemmatizer","timestamp":1748037479033,"sparkVersion":"3.5.1","uid":"Lemmatizer_a1cac65fa2ce","paramMap":{"inputCol":"filtered_tokens","outputCol":"lemmatized_tokens"},"defaultParamMap":{"outputCol":"Lemmatizer_a1cac65fa2ce__output"}}

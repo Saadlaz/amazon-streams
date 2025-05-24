@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Refresh Review Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'icon.PNG' %}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <img src="{% static 'Amazon_logo.png' %}" alt="Amazon Logo" class="logo">
+        <h1 class="dashboard-title">Auto-Refreshing Dashboard</h1>
+      </div>
+    </header>
+
+    <div class="stats-container">
+      <div class="total-reviews">
+        <h2 class="stat-title">Total Reviews</h2>
+        <p class="stat-value">{{ total_reviews }}</p>
+      </div>
+      <div class="positive-reviews">
+        <h2 class="stat-title">Positive Reviews Rate</h2>
+        <p class="stat-value">{{ positive_rate }}%</p>
+      </div>
+      <div class="average-rating">
+        <h2 class="stat-title">Negative Reviews Rate</h2>
+        <p class="stat-value">{{ negative_rate }}%</p>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <div class="chart-card">
+        <h2 class="chart-title">Sentiment Overview</h2>
+        <div class="chart-container">
+          <canvas id="sentimentChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h2 class="chart-title">Reviews Over Time</h2>
+        <div class="chart-container">
+          <canvas id="timeChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h2 class="chart-title">Sentiment Over Time</h2>
+        <div class="chart-container">
+          <canvas id="sentimentOverTimeChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sentiment Overview Chart
+    const sentimentData = {{ sentiment_data|safe }};
+    const ctx1 = document.getElementById('sentimentChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'pie',
+      data: {
+        labels: Object.keys(sentimentData),
+        datasets: [{
+          label: 'Sentiment',
+          data: Object.values(sentimentData),
+          backgroundColor: ['#ff6666', '#66cc66', '#FEBD69'],
+          borderColor: 'white',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'right' }
+        }
+      }
+    });
+
+    // Reviews Over Time Chart
+    const ctx2 = document.getElementById('timeChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: {{ dates|safe }},
+        datasets: [{
+          label: 'Reviews per Day',
+          data: {{ counts|safe }},
+          borderColor: '#FF9900',
+          backgroundColor: 'rgba(255,153,0,0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // Sentiment Over Time Chart
+    const sentimentOverTime = {{ sentiment_over_time|safe }};
+    const ctx3 = document.getElementById('sentimentOverTimeChart').getContext('2d');
+    new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: {{ months|safe }},
+        datasets: [
+          {
+            label: 'Negative',
+            data: sentimentOverTime.negative,
+            backgroundColor: '#ff6666'
+          },
+          {
+            label: 'Neutral',
+            data: sentimentOverTime.neutral,
+            backgroundColor: '#FEBD69'
+          },
+          {
+            label: 'Positive',
+            data: sentimentOverTime.positive,
+            backgroundColor: '#66cc66'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { stacked: true },
+          y: { stacked: true, beginAtZero: true }
+        },
+        plugins: {
+          legend: { position: 'top' }
+        }
+      }
+    });
+
+    // Auto-refresh every second
+    setTimeout(function () {
+      location.reload();
+    }, 2000);
+  </script>
+</body>
+</html>

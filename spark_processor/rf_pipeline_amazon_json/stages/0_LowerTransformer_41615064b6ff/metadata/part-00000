@@ -1,0 +1,1 @@
+{"class":"__main__.LowerTransformer","timestamp":1748037478466,"sparkVersion":"3.5.1","uid":"LowerTransformer_41615064b6ff","paramMap":{"inputCol":"reviewText","outputCol":"reviewText_lower"},"defaultParamMap":{"outputCol":"LowerTransformer_41615064b6ff__output"}}
